@@ -1,3 +1,5 @@
 node_modules
 prisma/docker-compose.yml
 steps.txt
+
+course-review-site/docker-compose.yml

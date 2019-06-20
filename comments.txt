@@ -1,0 +1,3 @@
+// SET_NULL (default) in this case when user is deleted it will not work bc author is set to non nullable User and both posts and comments must have an author.
+// use SET_NULL when deleting a post bc when a post is deleted the user/author associated with the post should not be deleted - same with comments
+// CASCADE behavior that needs to be used, when a user is removed both posts and comments will be removed relating to that user, same with post removal, comments should also be removed from that post.
