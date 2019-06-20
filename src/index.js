@@ -6,7 +6,7 @@ import User from './resolvers/User';
 import Post from './resolvers/Post';
 import Comment from './resolvers/Comment';
 import Subscription from './resolvers/Subscription';
-import './prisma';
+import prisma from './prisma';
 
 /* 
 types:
@@ -35,7 +35,8 @@ const server = new GraphQLServer({
   },
   context: {
     db,
-    pubsub
+    pubsub,
+    prisma
   }
 });
 

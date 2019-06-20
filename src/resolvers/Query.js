@@ -1,45 +1,46 @@
 const Query = {
-  me() {
-    return {
-      id: uuidv4(),
-      name: 'Josh',
-      email: 'josh@josh.com',
-      age: 30
-    };
-  },
-  getPost() {
-    return {
-      id: uuidv4(),
-      title: 'This is the title',
-      body: 'This is the body',
-      published: false
-    };
-  },
-  users(parent, args, { db }, info) {
-    if (!args.query) {
-      return db.users;
+  users(parent, args, { prisma }, info) {
+    const operationArgs = {};
+
+    // found in prisma generated schema - name_contains || email_contains for filtering
+    if (args.query) {
+      operationArgs.where = {
+        OR: [
+          {
+            name_contains: args.query
+          },
+          {
+            email_contains: args.query
+          }
+        ]
+      };
     }
-    //query names that have matching letters in the query
-    return db.users.filter(user =>
-      user.name.toLowerCase().includes(args.query.toLowerCase())
-    );
+
+    // 2nd arg takes nothing, string, or object. if a falsy value is provided prisma falls back and returns only scalar types for that set but no relational data.
+
+    // info object used instead of string because returned selection might change based on user input
+    return prisma.query.users(operationArgs, info);
   },
-  posts(parent, args, { db }, info) {
-    if (!args.query) {
-      return db.posts;
+  posts(parent, args, { prisma }, info) {
+    const operationArgs = {};
+
+    if (args.query) {
+      operationArgs.where = {
+        OR: [
+          {
+            title_contains: args.query
+          },
+          {
+            body_contains: args.query
+          }
+        ]
+      };
     }
-    return db.posts.filter(post => {
-      const isTitleMatch = post.title
-        .toLowerCase()
-        .includes(args.query.toLowerCase());
-      const isBodyMatch = post.body
-        .toLowerCase()
-        .includes(args.query.toLowerCase());
-      return isTitleMatch || isBodyMatch;
-    });
+
+    return prisma.query.posts(operationArgs, info);
   },
-  comments(parent, args, { db }, info) {
-    return db.comments;
+  comments(parent, args, { prisma }, info) {
+    return prisma.query.comments(null, info);
   }
 };
 
