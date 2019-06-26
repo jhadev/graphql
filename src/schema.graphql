@@ -97,10 +97,11 @@ enum MutationType {
 # type def for return value of post subscription
 type PostSubscriptionPayload {
   mutation: MutationType!
-  data: Post!
+  node: Post
 }
 
+# prisma calls data field node so it needs to be changed to have client and node sync up
 type CommentSubscriptionPayload {
   mutation: MutationType!
-  data: Comment!
+  node: Comment
 }
